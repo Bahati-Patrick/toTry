@@ -3,7 +3,7 @@ import  { ref } from 'vue';
 
 interface Restaurant {
   name?: string,
-  status?: string,
+  status?: RestaurantStatus,
   dishes?: Dish[]
 }
 
@@ -13,6 +13,7 @@ type RestaurantStatus =
 | 'Do not Recommed'
 | 'Must Try'
 
+// extract value from type
 const statusList = [
   'Want to Try',
   'Recommended',
@@ -26,7 +27,7 @@ const newRestaurant = ref<Restaurant>({});
 function addRestaurant () {
   restaurantList.value.push({
     name: newRestaurant.value.name,
-    status: 'Want to Try',
+    status: newRestaurant.value.status,
     dishes: []
   });
 }
@@ -64,7 +65,7 @@ function addRestaurant () {
     </form>
     <ul>
       <li v-for="restaurant in restaurantList" :key="restaurant.name">
-        {{ restaurant.name }}
+        {{ restaurant.name }} - {{ restaurant.status }}
       </li>
     </ul>
   </main>
