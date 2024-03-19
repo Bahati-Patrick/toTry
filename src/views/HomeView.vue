@@ -1,9 +1,71 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import  { ref } from 'vue';
+
+interface Restaurant {
+  name?: string,
+  status?: string,
+  dishes?: Dish[]
+}
+
+type RestaurantStatus = 
+| 'Want to Try' 
+| 'Recommended'
+| 'Do not Recommed'
+| 'Must Try'
+
+const statusList = [
+  'Want to Try',
+  'Recommended',
+  'Do not Recommed',
+  'Must Try'
+]
+
+const restaurantList = ref<Restaurant[]>([]);
+const newRestaurant = ref<Restaurant>({});
+
+function addRestaurant () {
+  restaurantList.value.push({
+    name: newRestaurant.value.name,
+    status: 'Want to Try',
+    dishes: []
+  });
+}
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <pre>
+      {{ newRestaurant }}
+    </pre>
+    <!-- form that will allow users to add a restaurant to a list -->
+    <form @submit.prevent="addRestaurant">
+      <div>
+        <label for="restaurant-name">Restaurant Name</label>
+        <input id="restaurant-name" type="text" v-model="newRestaurant.name">
+      </div>
+
+      <div>
+        <label for="restaurant-status">Restaurant Status</label>
+        <select 
+          name="restaurant-status" 
+          id="restaurant-status"
+          v-model="newRestaurant.status"
+        >
+          <option 
+            v-for="status in statusList"
+            :value="status"
+            :key="status"
+          >
+            {{ status }}
+          </option>
+        </select>
+      </div>
+      <button type="submit">Add Restaurant</button>
+    </form>
+    <ul>
+      <li v-for="restaurant in restaurantList" :key="restaurant.name">
+        {{ restaurant.name }}
+      </li>
+    </ul>
   </main>
 </template>
